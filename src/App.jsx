@@ -1,15 +1,9 @@
+// @flow
 import React from 'react'
-import Helmet from 'react-helmet'
+import Month from './components/Month'
 
 const App = () => (
-  <React.Fragment>
-    <Helmet>
-      <title>Home Page</title>
-    </Helmet>
-    <div>
-      Test
-    </div>
-  </React.Fragment>
+  <Month />
 )
 
 export default App
