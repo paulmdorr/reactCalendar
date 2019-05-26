@@ -1,20 +1,19 @@
 // @flow
 import React from 'react'
 import Paper from '@material-ui/core/Paper'
-import Grid from '@material-ui/core/Grid'
+import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { isThisMonth } from 'date-fns'
 
 const useStyles = makeStyles({
   paper: {
-    border: '1px solid #dadce0',
-    borderRight: 'none',
-    borderBottom: 'none',
+    borderTop: '1px solid #dadce0',
+    borderLeft: '1px solid #dadce0',
     color: '#70757a',
     height: '200px',
     padding: '10px',
     textAlign: 'center',
-    '& h2': {
+    '& h3': {
       fontSize: '14px',
     }
   },
@@ -39,9 +38,9 @@ const Day = ({ date }: Props) => {
   return (
     <Grid item className={classes.item}>
       <Paper className={classes.paper} square elevation={0}>
-        <h2 className={!isThisMonth(date) ? classes.disabled : classes.enabled}>
+        <Typography variant="h6" component="h3" className={!isThisMonth(date) ? classes.disabled : classes.enabled}>
           {date.getDate()}
-        </h2>
+        </Typography>
       </Paper>
     </Grid>
   )
