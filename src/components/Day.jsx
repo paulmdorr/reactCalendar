@@ -34,7 +34,6 @@ const useStyles = makeStyles({
     overflowY: 'auto',
   },
   reminder: {
-    backgroundColor: '#e4cdf7',
     margin: '5px auto',
   }
 })
@@ -63,8 +62,8 @@ const Day = ({ date, showReminder }: Props) => {
           <div className={classes.reminders}>
             {
               reminders[date.getTime()] && reminders[date.getTime()].map(reminder => (
-                <Paper className={classes.reminder}>
-                  <Typography>{ reminder }</Typography>
+                <Paper className={classes.reminder} style={{ backgroundColor: `rgba(${ reminder.color.r }, ${ reminder.color.g }, ${ reminder.color.b }, ${ reminder.color.a })` }}>
+                  <Typography>{ reminder.text }</Typography>
                 </Paper>
               ))
             }

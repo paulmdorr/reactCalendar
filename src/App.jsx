@@ -4,7 +4,11 @@ import { getDays } from './utils/toolBox'
 import Month from './components/Month'
 import { type GlobalState, reducer } from './reducers'
 
-const Context = React.createContext<GlobalState | void>()
+const Context = React.createContext<GlobalState>({
+  days: getDays(Date.now()),
+  dispatch: f => f,
+  reminders: {},
+})
 
 const App = () => {
   const [globalState: GlobalState, setGlobalState] = useState<GlobalState>({
