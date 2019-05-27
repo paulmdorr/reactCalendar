@@ -1,6 +1,8 @@
 # React Calendar
 
-A simple calendar based on react and redux
+A simple calendar based on react and the context API
+
+![Example image](https://i.imgur.com/YuGQiQs.png)
 
 ## Features
 
