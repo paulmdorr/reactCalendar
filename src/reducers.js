@@ -3,10 +3,17 @@
 export const SAVE_REMINDER = 'SAVE_REMINDER'
 
 /* Types for flow */
+export type Reminder = {
+  id: string,
+  text: string,
+  date: Date,
+  color: string,
+  time: string,
+}
 export type GlobalState = {
   days: Date[],
   dispatch: Function,
-  reminders: Object,
+  reminders: { [string]: Reminder[] },
 }
 
 export const reducer = (state: GlobalState, action: Object): GlobalState => {
