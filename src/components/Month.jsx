@@ -1,10 +1,11 @@
 // @flow
 import React from 'react'
-import { startOfMonth, endOfMonth, eachDay, subDays, addDays, format } from 'date-fns'
+import { format } from 'date-fns'
 import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Day from './Day'
 import ReminderForm from './ReminderForm'
+import { StateConsumer } from '../App'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,29 +38,6 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function getDays(date) {
-  const firstDay = startOfMonth(date)
-  let extraBeforeDays = firstDay.getDay()
-  let daysBefore = []
-  const lastDay = endOfMonth(date)
-  let extraAfterDays = 6 - lastDay.getDay()
-  let daysAfter = []
-
-  while (extraBeforeDays > 0) {
-    daysBefore.push(subDays(firstDay, extraBeforeDays--))
-  }
-
-  while (extraAfterDays > 0) {
-    daysAfter.push(addDays(lastDay, extraAfterDays--))
-  }
-
-  return [
-    ...daysBefore,
-    ...eachDay(startOfMonth(date), endOfMonth(date)),
-    ...daysAfter,
-  ]
-}
-
 type ReminderData = {
   anchorEl: Object,
   date: Date,
@@ -83,26 +61,30 @@ const Month = () => {
   }
 
   return (
-    <>
-      <Typography variant="h3" component="h1" gutterBottom className={classes.header}>
-        {format(Date.now(), 'MMM YYYY')}
-      </Typography>
-      <Grid container spacing={0} justify="center" className={classes.borderlessContainer}>
-        {dayNames.map(dayName =>
-          <Grid item className={classes.dayName} key={dayName}>
-            <Typography variant="h6" component="h2">
-              {dayName}
-            </Typography>
+    <StateConsumer>
+      {({ days }) => (
+        <>
+          <Typography variant="h3" component="h1" gutterBottom className={classes.header}>
+            {format(Date.now(), 'MMM YYYY')}
+          </Typography>
+          <Grid container spacing={0} justify="center" className={classes.borderlessContainer}>
+            {dayNames.map(dayName =>
+              <Grid item className={classes.dayName} key={dayName}>
+                <Typography variant="h6" component="h2">
+                  {dayName}
+                </Typography>
+              </Grid>
+            )}
           </Grid>
-        )}
-      </Grid>
-      <Grid container spacing={0} justify="center" className={classes.container}>
-        {getDays(Date.now()).map(day =>
-          <Day date={day} key={day.getTime()} showReminder={showReminder} />
-        )}
-      </Grid>
-      <ReminderForm handleClose={closeReminder} {...reminderData} />
-    </>
+          <Grid container spacing={0} justify="center" className={classes.container}>
+            {days.map(day =>
+              <Day date={day} key={day.getTime()} showReminder={showReminder} />
+            )}
+          </Grid>
+          <ReminderForm handleClose={closeReminder} {...reminderData} />
+        </>
+      )}
+    </StateConsumer>
   )
 }
 
