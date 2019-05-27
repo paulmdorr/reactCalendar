@@ -2,33 +2,9 @@
 import React, { useState } from 'react'
 import { getDays } from './utils/toolBox'
 import Month from './components/Month'
+import { type GlobalState, reducer } from './reducers'
 
-type GlobalState = {
-  days: Date[],
-  dispatch: Function,
-  reminders: Object,
-}
-
-const Context = React.createContext<GlobalState>({
-  days: getDays(Date.now()),
-  dispatch: f => f,
-  reminders: {},
-})
-export const SAVE_REMINDER = 'SAVE_REMINDER'
-
-const reducer = (state, action): GlobalState => {
-  switch (action.type) {
-    case (SAVE_REMINDER):
-      const reminders = { ...state.reminders }
-
-      reminders[action.id] = reminders[action.id] ? [...reminders[action.id]] : []
-      reminders[action.id].push(action.reminder)
-
-      return { ...state, reminders }
-    default:
-      return state
-  }
-}
+const Context = React.createContext<GlobalState | void>()
 
 const App = () => {
   const [globalState: GlobalState, setGlobalState] = useState<GlobalState>({
