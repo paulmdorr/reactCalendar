@@ -35,6 +35,10 @@ const useStyles = makeStyles({
   },
   reminder: {
     margin: '5px auto',
+  },
+  reminderText: {
+    padding: '0 5px',
+    textAlign: 'left',
   }
 })
 
@@ -47,6 +51,7 @@ const Day = ({ date, showReminder }: Props) => {
   const classes = useStyles()
   const isEnabled = !isThisMonth(date) ? classes.disabled : classes.enabled
   const itemClasses = classnames(classes.item, isToday(date) && classes.currentDay)
+  const dayId = date.getTime()
 
   function handleClick(event) {
     showReminder(event.currentTarget, date)
@@ -61,9 +66,15 @@ const Day = ({ date, showReminder }: Props) => {
           </Typography>
           <div className={classes.reminders}>
             {
-              reminders[date.getTime()] && reminders[date.getTime()].map(reminder => (
-                <Paper className={classes.reminder} style={{ backgroundColor: `rgba(${ reminder.color.r }, ${ reminder.color.g }, ${ reminder.color.b }, ${ reminder.color.a })` }}>
-                  <Typography>{ reminder.text }</Typography>
+              reminders[dayId] && reminders[dayId].map(reminder => (
+                <Paper
+                  key={reminder.id}
+                  className={classes.reminder}
+                  style={{ backgroundColor: reminder.color }}
+                >
+                  <Typography className={classes.reminderText} variant="body2">
+                    { `(${reminder.time}) ${reminder.text}` }
+                  </Typography>
                 </Paper>
               ))
             }
