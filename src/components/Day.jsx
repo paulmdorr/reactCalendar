@@ -1,19 +1,22 @@
 // @flow
 import React from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, Paper, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { isThisMonth, isToday } from 'date-fns'
 import classnames from 'classnames'
+import { StateConsumer } from '../App'
 
 const useStyles = makeStyles({
   item: {
     borderTop: '1px solid #dadce0',
     borderLeft: '1px solid #dadce0',
     color: '#70757a',
+    height: '20%',
     padding: '10px',
     textAlign: 'center',
     '& h3': {
       fontSize: '14px',
+      height: '20%',
     },
     width: '14.28%',
   },
@@ -26,6 +29,14 @@ const useStyles = makeStyles({
   currentDay: {
     backgroundColor: '#d5fcc2',
   },
+  reminders: {
+    height: '80%',
+    overflowY: 'auto',
+  },
+  reminder: {
+    backgroundColor: '#e4cdf7',
+    margin: '5px auto',
+  }
 })
 
 type Props = {
@@ -43,11 +54,24 @@ const Day = ({ date, showReminder }: Props) => {
   }
 
   return (
-    <Grid item className={itemClasses} onClick={handleClick}>
-      <Typography variant="h6" component="h3" className={isEnabled}>
-        {date.getDate()}
-      </Typography>
-    </Grid>
+    <StateConsumer>
+      {({ reminders }) => (
+        <Grid item className={itemClasses} onClick={handleClick}>
+          <Typography variant="h6" component="h3" className={isEnabled}>
+            {date.getDate()}
+          </Typography>
+          <div className={classes.reminders}>
+            {
+              reminders[date.getTime()] && reminders[date.getTime()].map(reminder => (
+                <Paper className={classes.reminder}>
+                  <Typography>{ reminder }</Typography>
+                </Paper>
+              ))
+            }
+          </div>
+        </Grid>
+      )}
+    </StateConsumer>
   )
 }
 
