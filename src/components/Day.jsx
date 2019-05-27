@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { Grid, Typography, Paper, Box } from '@material-ui/core'
+import { Grid, Typography, Paper } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { isThisMonth, isToday } from 'date-fns'
 import classnames from 'classnames'
@@ -66,17 +66,21 @@ const Day = ({ date, showReminder }: Props) => {
           </Typography>
           <div className={classes.reminders}>
             {
-              reminders[dayId] && reminders[dayId].map(reminder => (
-                <Paper
-                  key={reminder.id}
-                  className={classes.reminder}
-                  style={{ backgroundColor: reminder.color }}
-                >
-                  <Typography className={classes.reminderText} variant="body2">
-                    { `(${reminder.time}) ${reminder.text}` }
-                  </Typography>
-                </Paper>
-              ))
+              reminders[dayId] && reminders[dayId]
+                .sort((r1, r2) => {
+                  return r1.time < r2.time ? -1 : 1
+                })
+                .map(reminder => (
+                  <Paper
+                    key={reminder.id}
+                    className={classes.reminder}
+                    style={{ backgroundColor: reminder.color }}
+                  >
+                    <Typography className={classes.reminderText} variant="body2">
+                      { `(${reminder.time}) ${reminder.text}` }
+                    </Typography>
+                  </Paper>
+                ))
             }
           </div>
         </Grid>
