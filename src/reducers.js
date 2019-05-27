@@ -13,7 +13,7 @@ export type Reminder = {
 export type GlobalState = {
   days: Date[],
   dispatch: Function,
-  reminders: { [string]: Reminder[] },
+  reminders: { [number]: Reminder[] },
 }
 
 export const reducer = (state: GlobalState, action: Object): GlobalState => {
