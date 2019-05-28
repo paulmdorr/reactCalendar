@@ -1,12 +1,13 @@
 {
   "name": "react_calendar",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A simple calendar based on react and redux",
   "main": "index.js",
   "author": "Paul M Dorr",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel public/index.html"
+    "dev": "parcel public/index.html",
+    "build": "parcel build public/index.html"
   },
   "dependencies": {
     "@material-ui/core": "^4.0.0",

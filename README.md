@@ -7,7 +7,8 @@ A simple calendar based on react and the context API
 ## Features
 
 - Shows current month in grid form
-- The user can add and open reminders for that month
+- Add reminders for that month (with date, time, text and color)
+- Open and edit reminders
 
 ## Installation
 
@@ -19,4 +20,10 @@ yarn install
 
 ```bash
 yarn dev
+```
+
+## Building for production use
+
+```bash
+yarn build
 ```
