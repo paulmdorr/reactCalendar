@@ -24,8 +24,8 @@ export const reducer = (state: GlobalState, action: Object): GlobalState => {
       reminders[action.id] = reminders[action.id] ? [...reminders[action.id]] : []
 
       // Remove reminder if it exists
-      if (reminders[action.id].find(reminder => reminder.id === action.reminder.id)) {
-        reminders[action.id] = reminders[action.id]
+      if (reminders[action.prevId].find(reminder => reminder.id === action.reminder.id)) {
+        reminders[action.prevId] = reminders[action.prevId]
           .filter(reminder => reminder.id !== action.reminder.id)
       }
       reminders[action.id].push(action.reminder)

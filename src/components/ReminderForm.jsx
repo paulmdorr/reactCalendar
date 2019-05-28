@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Popover, TextField, Button, Typography, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import { v1 as uuid } from 'uuid'
 import { StateConsumer } from '../App'
 import { SAVE_REMINDER } from '../reducers'
@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
   },
   date: {
     display: 'inline-block',
-    marginTop: '20px',
+    margin: '17px 10px 0 0',
+    width: '100px',
   },
   time: {
     display: 'inline-block',
@@ -39,12 +40,13 @@ const useStyles = makeStyles(theme => ({
     background: ({ currentColor }) => currentColor,
   },
   swatch: {
-    padding: '5px',
     background: '#fff',
     borderRadius: '1px',
     boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-    display: 'inline-block',
     cursor: 'pointer',
+    display: 'inline-block',
+    marginTop: '17px',
+    padding: '5px',
     position: 'relative',
     top: '6px',
   },
@@ -66,6 +68,7 @@ const ReminderForm = ({ anchorEl, handleClose, date, data }: Props) => {
   const [currentColor, setCurrentColor] = useState(data ? data.color : '#ffd6b2')
   const [displayColorPicker, setDisplayColorPicker] = useState(false)
   const [time, setTime] = useState(data ? data.time : '07:30')
+  const [currentDate, setCurrentDate] = useState<string>('')
 
   const isOpen = !!anchorEl
   const id = isOpen ? 'reminder-popover' : null
@@ -85,13 +88,16 @@ const ReminderForm = ({ anchorEl, handleClose, date, data }: Props) => {
   }
 
   const handleSave = dispatch => {
+    const newDate = parse(currentDate)
+
     dispatch({
       type: SAVE_REMINDER,
-      id: date.getTime(),
+      id: newDate.getTime(),
+      prevId: data ? data.date.getTime() : newDate.getTime(),
       reminder: {
         id: data ? data.id : uuid(),
         text: reminderText,
-        date: date,
+        date: newDate,
         color: currentColor,
         time: time,
       }
@@ -101,8 +107,9 @@ const ReminderForm = ({ anchorEl, handleClose, date, data }: Props) => {
 
   const resetPopover = () => {
     setReminderText(data ? data.text : '')
-    setCurrentColor(data ? data.color : '#ffd6b2')
+    setCurrentColor(data ? data.color : '#d4c4fb')
     setTime(data ? data.time : '07:30')
+    setCurrentDate(format(date, 'YYYY-MM-DD'))
   }
 
   const popoverProps = {
@@ -167,6 +174,17 @@ const ReminderForm = ({ anchorEl, handleClose, date, data }: Props) => {
     value: time,
   }
 
+  const dateTextFieldProps = {
+    id: 'date',
+    type: 'date',
+    className: classes.date,
+    InputLabelProps: {
+      shrink: true,
+    },
+    onChange: (event) => setCurrentDate(event.target.value),
+    value: currentDate,
+  }
+
   const buttonProps = {
     color: 'primary',
     variant: 'contained',
@@ -178,9 +196,7 @@ const ReminderForm = ({ anchorEl, handleClose, date, data }: Props) => {
       {({ dispatch }) => (
         <Popover {...popoverProps} >
           <TextField {...reminderTextFieldProps} />
-          <Typography className={classes.date}>
-            {date && format(date, 'MMM DD, YYYY')}
-          </Typography>
+          <TextField {...dateTextFieldProps} />
           <TextField {...timeTextFieldProps} />
           <div id="color-popover-button" className={classes.swatch} onClick={handleOpenColorPicker}>
             <div className={classes.color} />
