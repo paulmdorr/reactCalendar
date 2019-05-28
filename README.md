@@ -2,7 +2,7 @@
 
 A simple calendar based on react and the context API
 
-![Example image](https://i.imgur.com/YuGQiQs.png)
+![Example image](https://i.imgur.com/FXKiTKh.png)
 
 ## Features
 

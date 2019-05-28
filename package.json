@@ -1,6 +1,6 @@
 {
   "name": "react_calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple calendar based on react and redux",
   "main": "index.js",
   "author": "Paul M Dorr",
