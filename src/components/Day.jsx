@@ -62,7 +62,14 @@ const Day = ({ date, showReminder }: Props) => {
             {
               reminders[dayId] && reminders[dayId]
                 .sort((r1, r2) => {
-                  return r1.time < r2.time ? -1 : 1
+                  let result = r1.time < r2.time ? -1 : 1
+
+                  // Sorting by id to keep order between updates
+                  if (r1.time === r2.time) {
+                    result = r1.id < r2.id ? -1 : 1
+                  }
+
+                  return result
                 })
                 .map(reminder => (
                   <Reminder key={reminder.id} data={reminder} showReminder={showReminder} />
