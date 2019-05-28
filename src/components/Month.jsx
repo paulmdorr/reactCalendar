@@ -49,10 +49,11 @@ const Month = () => {
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   const [reminderData: ReminderData, setReminderData] = React.useState<ReminderData | null>(null)
 
-  function showReminder(target, date) {
+  function showReminder(target, date, data) {
     !reminderData && setReminderData({
       anchorEl: target,
-      date
+      date: data ? data.date : date,
+      data,
     })
   }
 

@@ -1,10 +1,11 @@
 // @flow
 import React from 'react'
-import { Grid, Typography, Paper } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { isThisMonth, isToday } from 'date-fns'
 import classnames from 'classnames'
 import { StateConsumer } from '../App'
+import Reminder from './Reminder'
 
 const useStyles = makeStyles({
   item: {
@@ -33,13 +34,6 @@ const useStyles = makeStyles({
     height: '80%',
     overflowY: 'auto',
   },
-  reminder: {
-    margin: '5px auto',
-  },
-  reminderText: {
-    padding: '0 5px',
-    textAlign: 'left',
-  }
 })
 
 type Props = {
@@ -71,15 +65,7 @@ const Day = ({ date, showReminder }: Props) => {
                   return r1.time < r2.time ? -1 : 1
                 })
                 .map(reminder => (
-                  <Paper
-                    key={reminder.id}
-                    className={classes.reminder}
-                    style={{ backgroundColor: reminder.color }}
-                  >
-                    <Typography className={classes.reminderText} variant="body2">
-                      { `(${reminder.time}) ${reminder.text}` }
-                    </Typography>
-                  </Paper>
+                  <Reminder key={reminder.id} data={reminder} showReminder={showReminder} />
                 ))
             }
           </div>

@@ -57,14 +57,15 @@ type Props = {
   anchorEl: Object,
   handleClose: Function,
   date: Date,
+  data?: Object,
 }
 
-const ReminderForm = ({ anchorEl, handleClose, date }: Props) => {
+const ReminderForm = ({ anchorEl, handleClose, date, data }: Props) => {
   // Component state
-  const [reminderText, setReminderText] = useState('')
-  const [currentColor, setCurrentColor] = useState('#ffd6b2')
+  const [reminderText, setReminderText] = useState(data ? data.text : '')
+  const [currentColor, setCurrentColor] = useState(data ? data.color : '#ffd6b2')
   const [displayColorPicker, setDisplayColorPicker] = useState(false)
-  const [time, setTime] = useState('07:30')
+  const [time, setTime] = useState(data ? data.time : '07:30')
 
   const isOpen = !!anchorEl
   const id = isOpen ? 'reminder-popover' : null
@@ -88,7 +89,7 @@ const ReminderForm = ({ anchorEl, handleClose, date }: Props) => {
       type: SAVE_REMINDER,
       id: date.getTime(),
       reminder: {
-        id: uuid(),
+        id: data ? data.id : uuid(),
         text: reminderText,
         date: date,
         color: currentColor,
@@ -96,6 +97,12 @@ const ReminderForm = ({ anchorEl, handleClose, date }: Props) => {
       }
     })
     handleClose()
+  }
+
+  const resetPopover = () => {
+    setReminderText(data ? data.text : '')
+    setCurrentColor(data ? data.color : '#ffd6b2')
+    setTime(data ? data.time : '07:30')
   }
 
   const popoverProps = {
@@ -114,10 +121,10 @@ const ReminderForm = ({ anchorEl, handleClose, date }: Props) => {
     classes: {
       paper: classes.paper,
     },
+    onEnter: resetPopover,
   }
 
   const colorPopoverProps = {
-    ...popoverProps,
     id: 'color-popover',
     anchorEl: document.getElementById('color-popover-button'),
     open: displayColorPicker,
@@ -129,6 +136,11 @@ const ReminderForm = ({ anchorEl, handleClose, date }: Props) => {
       vertical: 'center',
       horizontal: 'left',
     },
+    classes: {
+      paper: classes.paper,
+    },
+    color: currentColor,
+    onClose: handleClose,
   }
 
   const reminderTextFieldProps = {
@@ -138,12 +150,12 @@ const ReminderForm = ({ anchorEl, handleClose, date }: Props) => {
     className: classes.textField,
     onChange: (event) => setReminderText(event.target.value),
     inputProps: { maxLength: 30 },
+    value: reminderText,
   }
 
   const timeTextFieldProps = {
     id: 'time',
     type: 'time',
-    defaultValue: '07:30',
     className: classes.time,
     InputLabelProps: {
       shrink: true,
@@ -152,6 +164,7 @@ const ReminderForm = ({ anchorEl, handleClose, date }: Props) => {
       step: 300,
     },
     onChange: (event) => setTime(event.target.value),
+    value: time,
   }
 
   const buttonProps = {
