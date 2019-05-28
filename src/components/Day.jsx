@@ -1,10 +1,11 @@
 // @flow
 import React from 'react'
-import { Grid, Typography, Paper, Box } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { isThisMonth, isToday } from 'date-fns'
 import classnames from 'classnames'
 import { StateConsumer } from '../App'
+import Reminder from './Reminder'
 
 const useStyles = makeStyles({
   item: {
@@ -33,10 +34,6 @@ const useStyles = makeStyles({
     height: '80%',
     overflowY: 'auto',
   },
-  reminder: {
-    backgroundColor: '#e4cdf7',
-    margin: '5px auto',
-  }
 })
 
 type Props = {
@@ -48,6 +45,7 @@ const Day = ({ date, showReminder }: Props) => {
   const classes = useStyles()
   const isEnabled = !isThisMonth(date) ? classes.disabled : classes.enabled
   const itemClasses = classnames(classes.item, isToday(date) && classes.currentDay)
+  const dayId = date.getTime()
 
   function handleClick(event) {
     showReminder(event.currentTarget, date)
@@ -62,11 +60,20 @@ const Day = ({ date, showReminder }: Props) => {
           </Typography>
           <div className={classes.reminders}>
             {
-              reminders[date.getTime()] && reminders[date.getTime()].map(reminder => (
-                <Paper className={classes.reminder}>
-                  <Typography>{ reminder }</Typography>
-                </Paper>
-              ))
+              reminders[dayId] && reminders[dayId]
+                .sort((r1, r2) => {
+                  let result = r1.time < r2.time ? -1 : 1
+
+                  // Sorting by id to keep order between updates
+                  if (r1.time === r2.time) {
+                    result = r1.id < r2.id ? -1 : 1
+                  }
+
+                  return result
+                })
+                .map(reminder => (
+                  <Reminder key={reminder.id} data={reminder} showReminder={showReminder} />
+                ))
             }
           </div>
         </Grid>
